@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MathController {
 
-
 	@GetMapping("/sum/{numberOne}/{numberTwo}")
 	public Double greeting(
 			@PathVariable(value="numberOne")String numberOne,
