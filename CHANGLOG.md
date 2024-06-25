@@ -5,3 +5,4 @@
  - Add exception response method
  - Add unsupported response math operation exception method
  - Add customized Response entity Exception method
+ - Add operations
