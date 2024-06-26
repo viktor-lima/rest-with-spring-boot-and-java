@@ -5,21 +5,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.exceptions.UnsupportedMathOperationException;
+import com.example.demo.math.SimpleMath;
+import com.example.demo.utils.NumberConverter;
 
 @RestController
 public class MathController {
+	
+	private SimpleMath math = new SimpleMath();
 
 	@GetMapping("/sum/{numberOne}/{numberTwo}")
 	public Double sum(
 			@PathVariable(value="numberOne")String numberOne,
 			@PathVariable(value="numberTwo") String numberTwo
 	)throws Exception{
-		if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+		if(!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo)) {
 			throw new UnsupportedMathOperationException(
 					"Please set a numeric Value"
 			);
 		}
-		return convertToDouble(numberOne) + convertToDouble(numberTwo);
+		return math.sum(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
 	}
 	
 	@GetMapping("/sub/{numberOne}/{numberTwo}")
@@ -27,12 +31,12 @@ public class MathController {
 			@PathVariable(value="numberOne")String numberOne,
 			@PathVariable(value="numberTwo") String numberTwo
 	)throws Exception{
-		if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+		if(!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo)) {
 			throw new UnsupportedMathOperationException(
 					"Please set a numeric Value"
 			);
 		}
-		return convertToDouble(numberOne) - convertToDouble(numberTwo);
+		return math.sub(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
 	}
 	
 	@GetMapping("/mult/{numberOne}/{numberTwo}")
@@ -40,13 +44,12 @@ public class MathController {
 			@PathVariable(value="numberOne")String numberOne,
 			@PathVariable(value="numberTwo") String numberTwo
 	)throws Exception{
-		if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+		if(!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo)) {
 			throw new UnsupportedMathOperationException(
 					"Please set a numeric Value"
 			);
 		}
-		Double result = convertToDouble(numberOne) * convertToDouble(numberTwo);
-		return result;
+		return math.mult(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
 	}
 	
 	@GetMapping("/div/{numberOne}/{numberTwo}")
@@ -54,7 +57,7 @@ public class MathController {
 			@PathVariable(value="numberOne")String numberOne,
 			@PathVariable(value="numberTwo") String numberTwo
 	)throws Exception{
-		if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+		if(!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo)) {
 			throw new UnsupportedMathOperationException(
 					"Please set a numeric Value"
 			);
@@ -65,8 +68,7 @@ public class MathController {
 					"No number can be divided by zero"
 			);
 		}
-		Double result = convertToDouble(numberOne) / convertToDouble(numberTwo);
-		return result;
+		return math.div(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
 	}
 	
 	
@@ -75,51 +77,26 @@ public class MathController {
 			@PathVariable(value="numberOne")String numberOne,
 			@PathVariable(value="numberTwo") String numberTwo
 	)throws Exception{
-		if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+		if(!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo)) {
 			throw new UnsupportedMathOperationException(
 					"Please set a numeric Value"
 			);
 		}
-		Double result = (convertToDouble(numberOne) + convertToDouble(numberTwo)) / 2;
-		return result;
+		return math.mean(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
 	}
 	
 	@GetMapping("/sqrt/{number}")
 	public Double sqrtRoot(
 			@PathVariable(value="number")String number
 	)throws Exception{
-		if(!isNumeric(number)) {
+		if(!NumberConverter.isNumeric(number)) {
 			throw new UnsupportedMathOperationException(
 					"Please set a numeric Value"
 			);
 		}
-		Double result = Math.sqrt(convertToDouble(number));
-		return result;
+		return math.sqrtRoot(NumberConverter.convertToDouble(number));
 	}
 
-	private Double convertToDouble(String strNumber) {
-		if(strNumber == null) {
-			return 0D;
-		}
-		// BRL 10,25 but US 10.25
-		String number = numberGlobal(strNumber);
-		if(isNumeric(number)) {
-			return Double.parseDouble(number);
-		}
-		return 0D;
-	}
 
-	private String numberGlobal(String strNumber) {
-		return strNumber.replaceAll(",", ".");
-		
-	}
-
-	private boolean isNumeric(String strNumber) {
-		if(strNumber == null) {
-			return false;
-		}
-		String number = numberGlobal(strNumber);
-		return number.matches("[-+]?[0-9]*\\.?[0-9]+");
-	}
 	
 }
