@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,13 @@ public class PersonController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public Person findById(@PathVariable(value ="id")String id) throws Exception{
 		return personServices.findById(id);
+	}
+	
+	@GetMapping(
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public List<Person> findById(){
+		return personServices.findAll();
 	}
 	
 
